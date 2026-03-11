@@ -1,5 +1,15 @@
+import type { ComponentType, ReactNode } from 'react'
 import { useEffect, useState } from 'react'
-import { Search } from 'lucide-react'
+import {
+  ArrowUpDown,
+  RotateCcw,
+  Search,
+  SlidersHorizontal,
+  Sparkles,
+  Star,
+  Tags,
+  Wallet,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -17,7 +27,34 @@ type RestaurantFiltersProps = {
 }
 
 const selectClassName =
-  'flex h-11 w-full rounded-full border border-input bg-white px-4 text-sm text-foreground shadow-sm transition-all outline-none focus:border-foreground/20 focus:ring-4 focus:ring-primary/10'
+  'h-12 w-full appearance-none rounded-[1.2rem] border border-white/70 bg-white/82 px-4 pr-10 text-sm font-medium text-foreground shadow-[0_18px_32px_-28px_rgba(15,23,42,0.45)] outline-none transition-all backdrop-blur-xl focus:border-primary/45 focus:ring-4 focus:ring-primary/12'
+
+function hasDraftChanges(draftSearch: RestaurantRouteSearch, search: RestaurantRouteSearch) {
+  return (
+    draftSearch.q !== search.q ||
+    draftSearch.category !== search.category ||
+    draftSearch.price !== search.price ||
+    draftSearch.rating !== search.rating
+  )
+}
+
+type FilterFieldProps = {
+  label: string
+  icon: ComponentType<{ className?: string }>
+  children: ReactNode
+}
+
+function FilterField({ label, icon: Icon, children }: FilterFieldProps) {
+  return (
+    <label className="space-y-2">
+      <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+        <Icon className="h-3.5 w-3.5" />
+        {label}
+      </span>
+      {children}
+    </label>
+  )
+}
 
 export function RestaurantFilters({
   search,
@@ -31,116 +68,177 @@ export function RestaurantFilters({
     setDraftSearch(search)
   }, [search])
 
+  const hasActiveFilters = hasActiveRestaurantFilters(search)
+  const isDirty = hasDraftChanges(draftSearch, search)
+
   return (
-    <section className="space-y-4">
-      <label className="space-y-2">
-        <span className="text-xs uppercase tracking-[0.24em] text-muted-foreground">Busca</span>
-        <div className="relative">
-          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            className="h-12 rounded-[1.25rem] border-border bg-white pl-11 text-base shadow-none focus:border-foreground/20 focus:ring-4 focus:ring-primary/10"
-            onChange={(event) =>
-              setDraftSearch((currentSearch) => ({
-                ...currentSearch,
-                q: event.target.value,
-              }))
-            }
-            placeholder="Qual restaurante ou prato?"
-            value={draftSearch.q}
-          />
+    <section className="rounded-[2rem] border border-white/70 bg-white/60 p-4 shadow-[0_28px_60px_-40px_rgba(15,23,42,0.35)] backdrop-blur-2xl sm:p-5">
+      <form
+        className="space-y-5"
+        onSubmit={(event) => {
+          event.preventDefault()
+          onApply(draftSearch)
+        }}
+      >
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="space-y-2">
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
+              <SlidersHorizontal className="h-3.5 w-3.5" />
+              smart filters
+            </span>
+            <div>
+              <h2 className="text-2xl font-semibold tracking-[-0.04em] text-foreground sm:text-[2rem]">
+                Refine sua busca
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Ajuste nome, categoria, preco e avaliacao para encontrar o restaurante ideal.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <span
+              className={cn(
+                'rounded-full border px-3 py-1.5 text-xs font-medium shadow-sm',
+                hasActiveFilters
+                  ? 'border-primary/12 bg-primary/10 text-primary'
+                  : 'border-white/70 bg-white/72 text-muted-foreground',
+              )}
+            >
+              {hasActiveFilters ? 'Filtros ativos' : 'Exploracao sem filtros'}
+            </span>
+            {isDirty ? (
+              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 shadow-sm">
+                Alteracoes pendentes
+              </span>
+            ) : null}
+          </div>
         </div>
-      </label>
 
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-        <label className="space-y-2">
-          <span className="text-xs uppercase tracking-[0.24em] text-muted-foreground">Ordenacao</span>
-          <select className={selectClassName} defaultValue="alphabetical">
-            <option value="alphabetical">Ordem alfabetica</option>
-          </select>
-        </label>
+        <FilterField label="Busca" icon={Search}>
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              className="h-14 rounded-[1.35rem] border-white/70 bg-white/80 pl-11 text-base shadow-[0_20px_38px_-30px_rgba(15,23,42,0.38)] focus:border-primary/45 focus:ring-4 focus:ring-primary/12"
+              onChange={(event) =>
+                setDraftSearch((currentSearch) => ({
+                  ...currentSearch,
+                  q: event.target.value,
+                }))
+              }
+              placeholder="Qual restaurante, prato ou experiencia voce procura?"
+              value={draftSearch.q}
+            />
+          </div>
+        </FilterField>
 
-        <label className="space-y-2">
-          <span className="text-xs uppercase tracking-[0.24em] text-muted-foreground">Categoria</span>
-          <select
-            className={selectClassName}
-            onChange={(event) =>
-              setDraftSearch((currentSearch) => ({
-                ...currentSearch,
-                category: event.target.value,
-              }))
-            }
-            value={draftSearch.category}
-          >
-            <option value="all">Culinaria</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <FilterField label="Ordenacao" icon={ArrowUpDown}>
+            <div className="relative">
+              <select className={selectClassName} defaultValue="alphabetical">
+                <option value="alphabetical">Ordem alfabetica</option>
+              </select>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">
+                ▾
+              </span>
+            </div>
+          </FilterField>
 
-        <label className="space-y-2">
-          <span className="text-xs uppercase tracking-[0.24em] text-muted-foreground">Preco</span>
-          <select
-            className={selectClassName}
-            onChange={(event) =>
-              setDraftSearch((currentSearch) => ({
-                ...currentSearch,
-                price: event.target.value,
-              }))
-            }
-            value={draftSearch.price}
-          >
-            <option value="all">Faixa de preco</option>
-            {restaurantPriceRanges.map((priceRange) => (
-              <option key={priceRange} value={priceRange}>
-                {priceRange}
-              </option>
-            ))}
-          </select>
-        </label>
+          <FilterField label="Categoria" icon={Tags}>
+            <div className="relative">
+              <select
+                className={selectClassName}
+                onChange={(event) =>
+                  setDraftSearch((currentSearch) => ({
+                    ...currentSearch,
+                    category: event.target.value,
+                  }))
+                }
+                value={draftSearch.category}
+              >
+                <option value="all">Todas as culinarias</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">
+                ▾
+              </span>
+            </div>
+          </FilterField>
 
-        <label className="space-y-2">
-          <span className="text-xs uppercase tracking-[0.24em] text-muted-foreground">Nota</span>
-          <select
-            className={selectClassName}
-            onChange={(event) =>
-              setDraftSearch((currentSearch) => ({
-                ...currentSearch,
-                rating: event.target.value,
-              }))
-            }
-            value={draftSearch.rating}
-          >
-            <option value="all">Avaliacao minima</option>
-            <option value="4.0">4.0+</option>
-            <option value="4.5">4.5+</option>
-            <option value="4.8">4.8+</option>
-          </select>
-        </label>
-      </div>
+          <FilterField label="Preco" icon={Wallet}>
+            <div className="relative">
+              <select
+                className={selectClassName}
+                onChange={(event) =>
+                  setDraftSearch((currentSearch) => ({
+                    ...currentSearch,
+                    price: event.target.value,
+                  }))
+                }
+                value={draftSearch.price}
+              >
+                <option value="all">Qualquer faixa</option>
+                {restaurantPriceRanges.map((priceRange) => (
+                  <option key={priceRange} value={priceRange}>
+                    {priceRange}
+                  </option>
+                ))}
+              </select>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">
+                ▾
+              </span>
+            </div>
+          </FilterField>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap gap-2">
-          <span
-            className={cn(
-              'rounded-full border px-3 py-1 text-xs font-medium',
-              hasActiveRestaurantFilters(search)
-                ? 'border-primary/10 bg-red-50 text-primary'
-                : 'border-border bg-white text-muted-foreground',
-            )}
-          >
-            {hasActiveRestaurantFilters(search) ? 'Filtros ativos' : 'Sem filtros ativos'}
-          </span>
+          <FilterField label="Nota minima" icon={Star}>
+            <div className="relative">
+              <select
+                className={selectClassName}
+                onChange={(event) =>
+                  setDraftSearch((currentSearch) => ({
+                    ...currentSearch,
+                    rating: event.target.value,
+                  }))
+                }
+                value={draftSearch.rating}
+              >
+                <option value="all">Qualquer avaliacao</option>
+                <option value="4.0">4.0+</option>
+                <option value="4.5">4.5+</option>
+                <option value="4.8">4.8+</option>
+              </select>
+              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">
+                ▾
+              </span>
+            </div>
+          </FilterField>
         </div>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Button onClick={onReset} variant="outline">
-            Limpar
-          </Button>
-          <Button onClick={() => onApply(draftSearch)}>Aplicar filtros</Button>
+
+        <div className="flex flex-col gap-3 border-t border-white/55 pt-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-muted-foreground">
+            Combine filtros para comparar resultados com mais clareza entre as versoes A e B.
+          </p>
+
+          <div className="flex flex-col-reverse gap-3 sm:flex-row">
+            <Button
+              className="border-white/70 bg-white/72 shadow-[0_18px_32px_-28px_rgba(15,23,42,0.4)] hover:bg-white"
+              onClick={onReset}
+              variant="outline"
+            >
+              <RotateCcw className="h-4 w-4" />
+              Limpar
+            </Button>
+            <Button className="shadow-[0_22px_38px_-22px_rgba(52,127,226,0.5)]" type="submit">
+              <Sparkles className="h-4 w-4" />
+              Aplicar filtros
+            </Button>
+          </div>
         </div>
-      </div>
+      </form>
     </section>
   )
 }

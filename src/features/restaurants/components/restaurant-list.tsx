@@ -1,8 +1,10 @@
 import { AlertCircle } from 'lucide-react'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
-import { RestaurantCard } from '@/features/restaurants/components/restaurant-card'
+import {
+  RestaurantCard,
+  RestaurantCardSkeleton,
+} from '@/features/restaurants/components/restaurant-card'
 import type { Restaurant } from '@/features/restaurants/types/restaurant'
 
 type RestaurantListProps = {
@@ -19,15 +21,8 @@ type RestaurantListProps = {
 function RestaurantListSkeleton() {
   return (
     <div className="grid gap-8 lg:grid-cols-2">
-      {Array.from({ length: 6 }).map((_, index) => (
-        <div className="overflow-hidden rounded-[1.75rem]" key={index}>
-          <Skeleton className="aspect-[16/10] rounded-[1.75rem]" />
-          <div className="space-y-4 px-2 pb-2 pt-4">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-8 w-2/3" />
-            <Skeleton className="h-4 w-3/4" />
-          </div>
-        </div>
+      {Array.from({ length: 8 }).map((_, index) => (
+        <RestaurantCardSkeleton key={index} />
       ))}
     </div>
   )

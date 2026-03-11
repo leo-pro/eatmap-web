@@ -1,6 +1,7 @@
 import { Clock3, MapPin, Star } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import type { Restaurant } from '@/features/restaurants/types/restaurant'
 import { formatEta, formatRating } from '@/utils/format'
 
@@ -54,5 +55,38 @@ export function RestaurantCard({ restaurant, onSelect }: RestaurantCardProps) {
         </div>
       </Card>
     </button>
+  )
+}
+
+export function RestaurantCardSkeleton() {
+  return (
+    <div className="w-full">
+      <Card className="overflow-hidden border-transparent bg-transparent shadow-none">
+        <div className="relative aspect-[16/10] overflow-hidden rounded-[1.75rem]">
+          <Skeleton className="h-full w-full rounded-[1.75rem]" />
+          <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
+            <Skeleton className="h-7 w-24 rounded-full bg-white/70" />
+            <Skeleton className="h-7 w-14 rounded-full bg-white/70" />
+          </div>
+        </div>
+
+        <div className="space-y-4 px-1 pb-2 pt-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0 flex-1 space-y-3">
+              <Skeleton className="h-10 w-2/3 rounded-2xl" />
+              <Skeleton className="h-4 w-full rounded-full" />
+              <Skeleton className="h-4 w-5/6 rounded-full" />
+            </div>
+            <Skeleton className="h-10 w-20 shrink-0 rounded-full" />
+          </div>
+
+          <div className="flex flex-wrap gap-x-4 gap-y-2">
+            <Skeleton className="h-5 w-24 rounded-full" />
+            <Skeleton className="h-5 w-20 rounded-full" />
+            <Skeleton className="h-5 w-10 rounded-full" />
+          </div>
+        </div>
+      </Card>
+    </div>
   )
 }
