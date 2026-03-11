@@ -12,6 +12,7 @@
 - [Scripts disponíveis](#scripts-disponíveis)
 - [Variáveis de ambiente](#variáveis-de-ambiente)
 - [Fluxo de dados](#fluxo-de-dados)
+- [Observabilidade com Sentry](#observabilidade-com-sentry)
 - [Observações](#observações)
 
 ## Sobre o projeto
@@ -46,6 +47,7 @@ Essa estrutura permite analisar diferenças de comportamento, organização de c
 - **shadcn/ui** como base de componentes reutilizáveis
 - **Lucide React** para ícones
 - **Vercel Speed Insights** para observabilidade de performance no frontend
+- **Sentry** para monitoramento de erros, traces SPA e Web Vitals
 
 ## Arquitetura do projeto
 
@@ -148,19 +150,29 @@ http://localhost:5173
 
 ## Variáveis de ambiente
 
-O projeto exige as seguintes variáveis públicas:
+O projeto exige as seguintes variaveis publicas:
 
 ```env
 VITE_SUPABASE_URL=https://your-project-ref.supabase.co
 VITE_SUPABASE_KEY=your-public-anon-or-publishable-key
+VITE_SENTRY_DSN=https://examplePublicKey@o0.ingest.sentry.io/0
+VITE_SENTRY_TRACES_SAMPLE_RATE=1
+VITE_APP_ENV=development
+VITE_APP_NAME=eatmap
+VITE_APP_VERSION=0.1.0
 ```
 
 ### Descrição
 
 - `VITE_SUPABASE_URL`: URL do projeto no Supabase
 - `VITE_SUPABASE_KEY`: chave pública (`anon` ou `publishable`) usada pelo frontend
+- `VITE_SENTRY_DSN`: DSN publico do projeto no Sentry. Se estiver ausente, a instrumentacao do Sentry fica desabilitada sem impedir a aplicacao de rodar.
+- `VITE_SENTRY_TRACES_SAMPLE_RATE`: taxa de amostragem das transacoes de performance. O valor sugerido nesta fase do experimento e `1`.
+- `VITE_APP_ENV`: ambiente enviado ao Sentry como `environment`.
+- `VITE_APP_NAME`: nome publico da aplicacao usado na `release`.
+- `VITE_APP_VERSION`: versao publica usada para compor a `release`.
 
-Se alguma dessas variáveis não estiver definida, a aplicação lança erro na inicialização da integração com Supabase.
+Se as variaveis do Supabase nao estiverem definidas, a aplicacao lanca erro na inicializacao da integracao com Supabase. As variaveis do Sentry sao publicas e opcionais nesta fase, com validacao da `traces sample rate` quando informada.
 
 ## Fluxo de dados
 
@@ -174,8 +186,40 @@ De forma resumida, o fluxo acontece assim:
 4. Os hooks consomem `restaurantApi.ts`, responsável por consultar a tabela `restaurants` no Supabase.
 5. Os dados retornados são mapeados para o modelo interno da aplicação antes de serem renderizados.
 
+## Observabilidade com Sentry
+
+A Fase 3 centraliza a instrumentacao do Sentry em `src/integrations/sentry`, com foco em erros, traces SPA e Web Vitals.
+
+- O SDK usa a integracao oficial `tanstackRouterBrowserTracingIntegration`.
+- Page loads e client-side navigations sao rastreados em uma SPA com TanStack Router.
+- Os nomes de transacao sao estabilizados para agrupamento:
+  - `/a/restaurants`
+  - `/a/restaurants/$restaurantSlug`
+  - `/b/restaurants`
+  - `/b/restaurants/$restaurantSlug`
+- As tags indexaveis enviadas pelo frontend ficam consistentes para filtragem:
+  - `ab_version`
+  - `app_area`
+  - `data_strategy`
+  - `route_group`
+- A versao do experimento e derivada centralmente da rota:
+  - rotas `/a/...` enviam `ab_version:A` e `data_strategy:manual`
+  - rotas `/b/...` enviam `ab_version:B` e `data_strategy:tanstack-query`
+- Contextos complementares ficam disponiveis para analise:
+  - `experiment`
+  - `routing`
+  - `pagination_state` quando existir pagina atual na URL
+
+### Filtros recomendados no Sentry
+
+- `ab_version:A`
+- `ab_version:B`
+- `transaction:/a/restaurants`
+- `transaction:/b/restaurants/$restaurantSlug`
+
 ## Observações
 
-- A integração com **Sentry** já possui uma estrutura inicial em `src/integrations/sentry`, mas ainda está reservada para uma fase futura de instrumentação.
+- A integracao com **Sentry** agora esta centralizada em `src/integrations/sentry`.
+- Source maps para producao podem ser adicionados depois com o plugin oficial do Sentry para Vite, mas isso ficou fora do foco desta fase.
 - O projeto usa **aliases** com `@` apontando para `src`, o que simplifica os imports.
 - O tema visual está centralizado em `src/styles/globals.css`, com uso de variáveis CSS e tokens aplicados ao Tailwind.
