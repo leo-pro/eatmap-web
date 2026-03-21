@@ -223,3 +223,4 @@ A Fase 3 centraliza a instrumentacao do Sentry em `src/integrations/sentry`, com
 - Source maps para producao podem ser adicionados depois com o plugin oficial do Sentry para Vite, mas isso ficou fora do foco desta fase.
 - O projeto usa **aliases** com `@` apontando para `src`, o que simplifica os imports.
 - O tema visual está centralizado em `src/styles/globals.css`, com uso de variáveis CSS e tokens aplicados ao Tailwind.
+- Em deploys SPA, rotas profundas como `/a/restaurants` e `/b/restaurants` exigem rewrite para `index.html`. O projeto inclui `vercel.json` para evitar `404 Not Found` ao atualizar a pagina preservando os `query params`.
