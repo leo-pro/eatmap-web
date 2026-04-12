@@ -4,3 +4,9 @@ dist
 *.local
 
 .env
+
+# Relatórios e temporários do Lighthouse
+.lighthouseci
+lhci_reports
+cli_reports
+lighthouse-results
