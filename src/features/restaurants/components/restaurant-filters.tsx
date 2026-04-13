@@ -82,37 +82,31 @@ export function RestaurantFilters({
       >
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-2">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
-              <SlidersHorizontal className="h-3.5 w-3.5" />
-              smart filters
-            </span>
+
             <div>
               <h2 className="text-2xl font-semibold tracking-[-0.04em] text-foreground sm:text-[2rem]">
                 Refine sua busca
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                Ajuste nome, categoria, preco e avaliacao para encontrar o restaurante ideal.
+                Filtre por nome, categoria, preco e avaliacao para encontrar o restaurante ideal.
               </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            <span
-              className={cn(
-                'rounded-full border px-3 py-1.5 text-xs font-medium shadow-sm',
-                hasActiveFilters
-                  ? 'border-primary/12 bg-primary/10 text-primary'
-                  : 'border-white/70 bg-white/72 text-muted-foreground',
-              )}
-            >
-              {hasActiveFilters ? 'Filtros ativos' : 'Exploracao sem filtros'}
-            </span>
-            {isDirty ? (
-              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 shadow-sm">
-                Alteracoes pendentes
+          {hasActiveFilters && (
+            <div className="flex flex-wrap gap-2">
+              <span
+                className={cn(
+                  'rounded-full border px-3 py-1.5 text-xs font-medium shadow-sm',
+                  hasActiveFilters
+                    ? 'border-primary/12 bg-primary/10 text-primary'
+                    : 'border-white/70 bg-white/72 text-muted-foreground',
+                )}
+              >
+                {hasActiveFilters ? 'Filtros ativos' : 'Exploracao sem filtros'}
               </span>
-            ) : null}
-          </div>
+            </div>
+          )}
         </div>
 
         <FilterField label="Busca" icon={Search}>
@@ -132,17 +126,7 @@ export function RestaurantFilters({
           </div>
         </FilterField>
 
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          <FilterField label="Ordenacao" icon={ArrowUpDown}>
-            <div className="relative">
-              <select className={selectClassName} defaultValue="alphabetical">
-                <option value="alphabetical">Ordem alfabetica</option>
-              </select>
-              <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground">
-                ▾
-              </span>
-            </div>
-          </FilterField>
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
 
           <FilterField label="Categoria" icon={Tags}>
             <div className="relative">
@@ -218,10 +202,7 @@ export function RestaurantFilters({
           </FilterField>
         </div>
 
-        <div className="flex flex-col gap-3 border-t border-white/55 pt-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-muted-foreground">
-            Combine filtros para comparar resultados com mais clareza entre as versoes A e B.
-          </p>
+        <div className="flex flex-col gap-3 border-t border-white/55 pt-4 items-end">
 
           <div className="flex flex-col-reverse gap-3 sm:flex-row">
             <Button

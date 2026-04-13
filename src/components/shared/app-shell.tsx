@@ -20,19 +20,14 @@ export function AppShell({ children }: PropsWithChildren) {
 
             <div className="min-w-0">
               <p className="text-[1.7rem] font-semibold leading-none tracking-[-0.05em] text-foreground">
-                eatmap
-              </p>
-              <p className="mt-1 text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-                restaurant discovery lab
+                Eatmap
               </p>
             </div>
-
-            <Compass className="hidden h-4 w-4 text-muted-foreground transition-transform duration-200 group-hover:rotate-12 sm:block" />
           </Link>
 
           <div className="hidden items-center gap-2 rounded-full border border-white/60 bg-white/50 px-3 py-2 text-xs uppercase tracking-[0.2em] text-muted-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.4)] backdrop-blur-xl sm:flex">
             <span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_0_4px_rgba(52,127,226,0.12)]" />
-            restaurant research interface
+            Descubra novos restaurantes todos os dias
           </div>
         </div>
       </header>

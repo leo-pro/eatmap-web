@@ -80,9 +80,6 @@ export function RestaurantList({
               Atualizando
             </span>
           ) : null}
-          <Button onClick={onRetry} size="sm" variant="outline">
-            Recarregar
-          </Button>
         </div>
       </div>
       {error ? (

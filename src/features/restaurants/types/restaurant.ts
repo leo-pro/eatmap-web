@@ -65,4 +65,4 @@ export type RestaurantRouteSearch = {
 
 export const restaurantPriceRanges: RestaurantPriceRange[] = ['$', '$$', '$$$']
 export const defaultRestaurantPage = 1
-export const defaultRestaurantPageSize = 8
+export const defaultRestaurantPageSize = 20

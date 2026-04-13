@@ -32,7 +32,7 @@ export function RestaurantCard({ restaurant, onSelect }: RestaurantCardProps) {
               <h3 className="font-serif text-[2rem] leading-none tracking-[-0.03em] text-foreground">
                 {restaurant.name}
               </h3>
-              <p className="mt-3 line-clamp-2 text-sm leading-7 text-muted-foreground">
+              <p className="mt-3 line-clamp-1 text-sm leading-7 text-muted-foreground">
                 {restaurant.description}
               </p>
             </div>

@@ -140,10 +140,6 @@ export function RestaurantDetail({
                 mantido em tela.
               </div>
             ) : null}
-
-            <Button className="w-full" onClick={onRetry} variant="outline">
-              Recarregar detalhes
-            </Button>
           </div>
         </div>
       </Card>
