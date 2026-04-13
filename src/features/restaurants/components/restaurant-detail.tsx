@@ -127,7 +127,7 @@ export function RestaurantDetail({
 
             <div>
               <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
-                Faixa de preco
+                Faixa de preço
               </p>
               <p className="mt-3 text-sm leading-7 text-foreground">
                 {restaurant.priceRange} · Ticket medio coerente com a categoria

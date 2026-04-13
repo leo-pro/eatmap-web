@@ -88,7 +88,7 @@ export function RestaurantFilters({
                 Refine sua busca
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                Filtre por nome, categoria, preco e avaliacao para encontrar o restaurante ideal.
+                Filtre por nome, categoria, preço e avaliacao para encontrar o restaurante ideal.
               </p>
             </div>
           </div>
@@ -153,7 +153,7 @@ export function RestaurantFilters({
             </div>
           </FilterField>
 
-          <FilterField label="Preco" icon={Wallet}>
+          <FilterField label="Preço" icon={Wallet}>
             <div className="relative">
               <select
                 className={selectClassName}
@@ -178,7 +178,7 @@ export function RestaurantFilters({
             </div>
           </FilterField>
 
-          <FilterField label="Nota minima" icon={Star}>
+          <FilterField label="Avaliação" icon={Star}>
             <div className="relative">
               <select
                 className={selectClassName}
