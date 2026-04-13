@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Restaurant } from "@/features/restaurants/types/restaurant";
+import { optimizeImageUrl } from "@/features/restaurants/utils/optimizeImageUrl";
 import { formatEta, formatRating } from "@/utils/format";
 
 type RestaurantDetailProps = {
@@ -69,8 +70,9 @@ export function RestaurantDetail({
           <img
             alt={restaurant.name}
             className="h-full w-full object-cover"
-            loading="lazy"
-            src={restaurant.imageUrl}
+            decoding="async"
+            fetchPriority="high"
+            src={optimizeImageUrl(restaurant.imageUrl, 1200)}
           />
         </div>
 

@@ -9,8 +9,7 @@ export function AppShell({ children }: PropsWithChildren) {
     <div className="app-shell">
       <header className="sticky top-0 z-30 border-b border-white/50 bg-background/80 backdrop-blur-2xl">
         <div className={`${shellContainerClassName} flex items-center justify-between py-4`}>
-          <Link
-            to="/"
+          <div
             className="group inline-flex min-w-0 items-center gap-3 rounded-[1.5rem] border border-white/60 bg-white/60 px-3 py-2 shadow-[0_18px_45px_-34px_rgba(15,23,42,0.45)] backdrop-blur-xl transition-transform duration-200 hover:-translate-y-0.5"
           >
             <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-[1.2rem] border border-white/70 bg-[linear-gradient(135deg,rgba(52,127,226,0.18),rgba(255,255,255,0.95),rgba(108,181,255,0.2))] shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_10px_24px_-16px_rgba(37,99,235,0.55)]">
@@ -23,7 +22,7 @@ export function AppShell({ children }: PropsWithChildren) {
                 Eatmap
               </p>
             </div>
-          </Link>
+          </div>
 
           <div className="hidden items-center gap-2 rounded-full border border-white/60 bg-white/50 px-3 py-2 text-xs uppercase tracking-[0.2em] text-muted-foreground shadow-[0_12px_30px_-24px_rgba(15,23,42,0.4)] backdrop-blur-xl sm:flex">
             <span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_0_4px_rgba(52,127,226,0.12)]" />

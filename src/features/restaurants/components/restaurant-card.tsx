@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { Restaurant } from '@/features/restaurants/types/restaurant'
+import { optimizeImageUrl } from '@/features/restaurants/utils/optimizeImageUrl'
 import { formatEta, formatRating } from '@/utils/format'
 
 type RestaurantCardProps = {
@@ -18,8 +19,9 @@ export function RestaurantCard({ restaurant, onSelect }: RestaurantCardProps) {
           <img
             alt={restaurant.name}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+            decoding="async"
             loading="lazy"
-            src={restaurant.imageUrl}
+            src={optimizeImageUrl(restaurant.imageUrl, 600)}
           />
           <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
             <Badge>{restaurant.category}</Badge>
