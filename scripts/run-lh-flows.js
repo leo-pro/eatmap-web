@@ -304,7 +304,13 @@ async function captureFlow(version, title) {
         reportStr += metrics.join(' | ');
         console.log(reportStr);
 
-        // Prepara linha para o CSV consolidado
+        // Monta descrição da etapa para o CSV:
+        // Ex: "Navigation report (http://localhost:4173/b/restaurants) - Tarefa 1"
+        const gatherMode = step.lhr.gatherMode; // "navigation" | "timespan" | "snapshot"
+        const modeLabel = gatherMode === 'navigation' ? 'Navigation report' : 'Timespan report';
+        const stepUrl = step.lhr.requestedUrl || step.lhr.finalDisplayedUrl || '';
+        const taskNumber = title.match(/^T(\d+)/)?.[1] ?? '?';
+        const etapaLabel = `${modeLabel} (${stepUrl}) - Tarefa ${taskNumber}`;
         const lcpStr = lcp !== undefined ? (lcp/1000).toFixed(3) : "";
         const fcpStr = fcp !== undefined ? (fcp/1000).toFixed(3) : "";
         const ttiStr = tti !== undefined ? (tti/1000).toFixed(3) : "";
@@ -314,7 +320,7 @@ async function captureFlow(version, title) {
         
         rows.push([
           version.toUpperCase() === 'A' ? 'Versao A (useEffect)' : 'Versao B (Tanstack Query)',
-          `"${title}"`,
+          `"${etapaLabel}"`,
           lcpStr,
           fcpStr,
           ttiStr,
